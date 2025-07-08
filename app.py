@@ -28,7 +28,7 @@ app_ui = ui.page_fluid(
             ),
             ui.input_checkbox_group(
                 "selected_species_list",
-                "Filter Species",
+                "Species",
                 ["Adelie", "Gentoo", "Chinstrap"],
                 selected=["Adelie", "Gentoo", "Chinstrap"],
                 inline=True
@@ -114,9 +114,6 @@ def server(input, output, session):
             title="Bill Length vs Body Mass by Species"
         )
         return fig
-
-app = App(app_ui, server)
-
 # --------------------------------------------------------
 # Reactive calculations and effects
 # --------------------------------------------------------
@@ -124,8 +121,12 @@ app = App(app_ui, server)
 # Add a reactive calculation to filter the data
 # By decorating the function with @reactive, we can use the function to filter the data
 # The function will be called whenever an input functions used to generate that output changes.
-# Any output that depends on the reactive function (e.g., filtered_data()) will be updated when the data changes.
+# Any output that depends on the reactive function (e.g., filtered_data()) will be updated when the data changes. 
 
-@reactive.calc
-def filtered_data():
-    return penguins_df
+    @reactive.calc
+    def filtered_data():
+        isSpeciesMatch = penguins_df["species"].isin(input.selected_species_list())
+        return penguins_df[isSpeciesMatch]
+
+app = App(app_ui, server)
+
