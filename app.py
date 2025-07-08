@@ -73,7 +73,7 @@ def server(input, output, session):
         if not bins:
             bins = 17
         fig = px.histogram(
-            penguins_df,
+            filtered_data(),
             x=col,
             nbins=int(bins),
             color="species",
@@ -89,7 +89,7 @@ def server(input, output, session):
             bins = 17
         fig, ax = plt.subplots()
         sns.histplot(
-            data=penguins_df,
+            data=filtered_data(),
             x=col,
             bins=int(bins),
             hue="species",
@@ -101,7 +101,7 @@ def server(input, output, session):
     @render_widget
     def plotly_scatterplot():
         fig = px.scatter(
-            penguins_df,
+            filtered_data(),
             x="bill_length_mm",
             y="body_mass_g",
             color="species",
