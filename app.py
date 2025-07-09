@@ -33,6 +33,13 @@ app_ui = ui.page_fluid(
                 selected=["Adelie", "Gentoo", "Chinstrap"],
                 inline=True
             ),
+            ui.input_checkbox_group(
+                "selected_island_list",
+                "Island",
+                ["Torgersen", "Biscoe", "Dream"],
+                selected=["Torgersen", "Biscoe", "Dream"],
+                inline=True
+            ),
             ui.hr(),
             ui.a(
                 "GitHub",
@@ -125,8 +132,10 @@ def server(input, output, session):
 
     @reactive.calc
     def filtered_data():
-        isSpeciesMatch = penguins_df["species"].isin(input.selected_species_list())
-        return penguins_df[isSpeciesMatch]
+        isSpeciesmatch = penguins_df["species"].isin(input.selected_species_list())
+        isIslandmatch = penguins_df["island"].isin(input.selected_island_list())
+        return penguins_df[isSpeciesmatch & isIslandmatch]
+
 
 app = App(app_ui, server)
 
